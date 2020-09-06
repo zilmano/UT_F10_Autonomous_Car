@@ -32,6 +32,9 @@
 #include "shared/ros/ros_helpers.h"
 #include "navigation.h"
 #include "visualization/visualization.h"
+#include <iostream>
+#include <ctime> 
+#include <chrono>
 
 using Eigen::Vector2f;
 using amrl_msgs::AckermannCurvatureDriveMsg;
@@ -89,7 +92,17 @@ void Navigation::ObservePointCloud(const vector<Vector2f>& cloud,
 }
 
 void Navigation::Run() {
+  
   // Create Helper functions here
+  auto timenow = 
+      std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()); 
+  
+  drive_msg_.velocity = 1.0;
+  drive_msg_.curvature = 0;
+  std::cout << std::ctime(&timenow) << " Publishing steering msg... " << "velocity:" << drive_msg_.velocity 
+            << "curvature " << drive_msg_.curvature <<std::endl;
+  
+  drive_pub_.publish(drive_msg_);
   // Milestone 1 will fill out part of this class.
   // Milestone 3 will complete the rest of navigation.
 }
